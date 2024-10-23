@@ -5,10 +5,10 @@ FROM openjdk:11-jre-slim
 WORKDIR /app
 
 # Copy the build output into the container
-COPY build/libs/ResourceCalc-all.jar /app/ResourceCalc.jar
+COPY build/libs/ResourceCalc-1.0-SNAPSHOT.jar /app/ResourceCalc.jar
 
 # Expose port 8080
 EXPOSE 8080
 
 # Define the command to run the app
-ENTRYPOINT ["java", "-jar", "ResourceCalc.jar"]
+ENTRYPOINT ["java", "-jar", "resourcecalc.jar"]

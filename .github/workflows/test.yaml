@@ -40,4 +40,4 @@ jobs:
 
       - name: Run tests
         run: |
-          docker-compose exec ResourceCalc java -jar /app/ResourceCalc.jar
+          docker-compose exec resourcecalc java -jar /app/resourcecalc.jar
