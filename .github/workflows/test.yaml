@@ -1,0 +1,29 @@
+name: Test ResourceCalc
+
+on: [push, pull_request]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up JDK 13
+        uses: actions/setup-java@v2
+        with:
+          java-version: '13'
+          distribution: ''
+
+      - name: Build with Gradle
+        run: ./gradlew build
+
+      - name: Build Docker images
+        run: docker-compose build
+
+      - name: Run Docker Compose
+        run: docker-compose up -d
+
+      - name: Run tests
+        run: ./gradlew test
