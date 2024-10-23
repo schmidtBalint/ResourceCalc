@@ -19,6 +19,17 @@ jobs:
           java-version: '11'
           distribution: 'temurin'
 
+      - name: Install Docker
+        run: |
+          sudo apt-get update
+          sudo apt-get install docker-ce docker-ce-cli containerd.io
+
+      - name: Install Docker Compose
+        run: |
+          sudo curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+          sudo chmod +x /usr/local/bin/docker-compose
+          sudo ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose
+
       - name: Build with Gradle
         run: ./gradlew build
 
@@ -29,4 +40,4 @@ jobs:
 
       - name: Run tests
         run: |
-          docker-compose exec ResourceCalc java -jar /app/cloud-usage.jar
+          docker-compose exec cloud-usage java -jar /app/ResourceCalc.jar
