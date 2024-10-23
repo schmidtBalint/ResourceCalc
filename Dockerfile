@@ -1,5 +1,14 @@
-FROM openjdk:13-jdk-alpine
-COPY . /app
+# Start with a base image that has Java 11
+FROM openjdk:11-jre-slim
+
+# Set the working directory inside the container
 WORKDIR /app
-RUN ./gradlew build
-CMD ["java", "-jar", "build/libs/ResourceCalc-1.0-SNAPSHOT.jar"]
+
+# Copy the build output into the container
+COPY build/libs/ResourceCalc-all.jar /app/ResourceCalc.jar
+
+# Expose port 8080
+EXPOSE 8080
+
+# Define the command to run the app
+ENTRYPOINT ["java", "-jar", "ResourceCalc.jar"]

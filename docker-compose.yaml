@@ -1,10 +1,13 @@
-version: '3'
+version: '3.8'
 services:
+  cloud-usage:
+    build: .
+    ports:
+      - "8080:8080"
+    depends_on:
+      - assessment
+
   assessment:
     image: mrksdh/assessment
     ports:
       - "8080:8080"
-  resourcecalc:
-    build: .
-    depends_on:
-      - assessment
