@@ -1,13 +1,13 @@
 import java.util.List;
 
 public class DatasetResponse {
-    private List<Dataset> events;
+    private List<Event> events;
 
-    public List<Dataset> getEvents() {
+    public List<Event> getEvents() {
         return events;
     }
 
-    public void setEvents(List<Dataset> events) {
+    public void setEvents(List<Event> events) {
         this.events = events;
     }
 }

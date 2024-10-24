@@ -1,9 +1,24 @@
-public class Result {
-    public String customerId;
-    public long consumption;
+import java.util.Collection;
 
-    public Result(String customerId, long consumption) {
-        this.customerId = customerId;
-        this.consumption = consumption;
+public class Result {
+    private Collection<Customer> customers;
+
+    public Result(Collection<Customer> customers) {
+        this.customers = customers;
+    }
+
+    public Collection<Customer> getCustomers() {
+        return customers;
+    }
+
+    public void setCustomers(Collection<Customer> customers) {
+        this.customers = customers;
+    }
+
+    @Override
+    public String toString() {
+        return "Result{" +
+                "customers=" + customers +
+                '}';
     }
 }
