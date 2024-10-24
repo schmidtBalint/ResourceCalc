@@ -5,8 +5,8 @@ import retrofit2.http.Body;
 
 public interface HTTPClient {
     @GET("/v1/dataset")
-    Call<DatasetResponse> getDataset();
+    Call<DatasetResponse> fetchDatasetAsJson();
 
     @POST("/v1/result")
-    Call<Void> sendResults(@Body Result result);
+    Call<Void> sendResult(@Body String json);
 }

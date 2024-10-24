@@ -1,24 +1,13 @@
-import java.util.Collection;
+import java.util.List;
 
 public class Result {
-    private Collection<Customer> customers;
+    private List<Event> events;
 
-    public Result(Collection<Customer> customers) {
-        this.customers = customers;
+    public List<Event> getEvents() {
+        return events;
     }
 
-    public Collection<Customer> getCustomers() {
-        return customers;
-    }
-
-    public void setCustomers(Collection<Customer> customers) {
-        this.customers = customers;
-    }
-
-    @Override
-    public String toString() {
-        return "Result{" +
-                "customers=" + customers +
-                '}';
+    public void setEvents(List<Event> events) {
+        this.events = events;
     }
 }
