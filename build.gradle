@@ -31,3 +31,6 @@ shadowJar {
     archiveClassifier.set('')
     archiveVersion.set('')
 }
+tasks.named('distZip') {
+    dependsOn tasks.named('shadowJar')  // Ensure shadowJar runs before distZip
+}
