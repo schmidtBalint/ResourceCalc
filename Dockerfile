@@ -1,14 +1,22 @@
-# Start with a base image that has Java 11
-FROM openjdk:11-jre-slim
+# Use an official Gradle image to build the Spring Boot app
+FROM gradle:8.10.2-jdk21 AS builder
 
 # Set the working directory inside the container
 WORKDIR /app
 
-# Copy the build output into the container
-COPY build/libs/ResourceCalc-1.0-SNAPSHOT.jar /app/ResourceCalc.jar
+# Copy the rest of the application code
+COPY . .
 
-# Expose port 8080
-EXPOSE 8080
+RUN gradle clean shadowJar --no-daemon
 
-# Define the command to run the app
-ENTRYPOINT ["java", "-jar", "resourcecalc.jar"]
+# Use an official OpenJDK runtime as a base image for running the application
+FROM openjdk:21-jdk-slim
+
+# Set the working directory inside the container
+WORKDIR /app
+
+# Copy the built JAR file from the first stage. It contains GSON
+COPY --from=builder /app/build/libs/*.jar app.jar
+
+# Run the main class from the JAR
+ENTRYPOINT ["java", "-jar", "app.jar"]

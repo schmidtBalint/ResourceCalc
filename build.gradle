@@ -1,6 +1,7 @@
 plugins {
     id 'java'
     id 'application'
+    id 'com.github.johnrengelman.shadow' version '7.1.2'
 }
 
 repositories {
@@ -14,5 +15,19 @@ dependencies {
 }
 
 application {
-    mainClassName = 'Main'
+    mainClass = 'Main'
+}
+
+jar {
+    manifest {
+        attributes(
+                'Main-Class': 'Main'
+        )
+    }
+}
+
+shadowJar {
+    archiveBaseName.set('ResourceCalc')
+    archiveClassifier.set('')
+    archiveVersion.set('')
 }
