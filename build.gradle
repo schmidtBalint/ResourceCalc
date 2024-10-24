@@ -34,3 +34,6 @@ shadowJar {
 tasks.named('distZip') {
     dependsOn tasks.named('shadowJar')  // Ensure shadowJar runs before distZip
 }
+tasks.named('distTar') {
+    dependsOn tasks.named('shadowJar')  // Ensure shadowJar runs before distTar
+}
