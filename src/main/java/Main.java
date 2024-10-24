@@ -6,7 +6,7 @@ public class Main {
     public static void main(String[] args) {
         // Create the Retrofit client
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://localhost:8080/")
+                .baseUrl("http://localhost:8080")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
