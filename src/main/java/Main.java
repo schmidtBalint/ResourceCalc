@@ -4,7 +4,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class Main {
     public static void main(String[] args) {
-        // Erstelle den Retrofit-Client
+        // Create the Retrofit client
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("http://localhost:8080/")
                 .addConverterFactory(GsonConverterFactory.create())
@@ -13,14 +13,15 @@ public class Main {
         HTTPClient service = retrofit.create(HTTPClient.class);
 
         try {
-            // Rohdaten abrufen
-            Response<List<Dataset>> response = service.getDataset().execute();
-            List<Dataset> datasets = response.body();
+            // Fetch raw data
+            Response<DatasetResponse> response = service.getDataset().execute();
+            DatasetResponse datasetResponse = response.body();
 
-            if (datasets != null) {
+            if (datasetResponse != null) {
+                List<Dataset> datasets = datasetResponse.getEvents();
                 Map<String, Long> customerUsage = calculateUsage(datasets);
 
-                // Ergebnis senden
+                // Send result
                 for (Map.Entry<String, Long> entry : customerUsage.entrySet()) {
                     Result result = new Result(entry.getKey(), entry.getValue());
                     service.sendResult(result).execute();
@@ -37,13 +38,13 @@ public class Main {
         Map<String, Long> workloadStartTimes = new HashMap<>();
 
         for (Dataset dataset : datasets) {
-            if ("start".equals(dataset.eventType)) {
-                workloadStartTimes.put(dataset.workloadId, dataset.timestamp);
-            } else if ("stop".equals(dataset.eventType)) {
-                Long startTime = workloadStartTimes.remove(dataset.workloadId);
+            if ("start".equals(dataset.getEventType())) {
+                workloadStartTimes.put(dataset.getWorkloadId(), dataset.getTimestamp());
+            } else if ("stop".equals(dataset.getEventType())) {
+                Long startTime = workloadStartTimes.remove(dataset.getWorkloadId());
                 if (startTime != null) {
-                    long duration = dataset.timestamp - startTime;
-                    customerUsage.merge(dataset.customerId, duration, Long::sum);
+                    long duration = dataset.getTimestamp() - startTime;
+                    customerUsage.merge(dataset.getCustomerId(), duration, Long::sum);
                 }
             }
         }

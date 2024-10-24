@@ -7,7 +7,7 @@ import retrofit2.http.Body;
 
 public interface HTTPClient {
     @GET("/v1/dataset")
-    Call<List<Dataset>> getDataset();
+    Call<DatasetResponse> getDataset();
 
     @POST("/v1/result")
     Call<Void> sendResult(@Body Result result);
