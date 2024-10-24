@@ -41,6 +41,9 @@ jobs:
       - name: List running containers
         run: docker ps
 
+      - name: Fetch build logs
+        run: docker-compose logs --tail=100
+
       - name: Fetch application logs
         run: docker-compose logs resourcecalc
 
