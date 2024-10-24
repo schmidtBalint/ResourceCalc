@@ -13,10 +13,10 @@ jobs:
       - name: Checkout the code
         uses: actions/checkout@v3
 
-      - name: Set up JDK 11 (Temurin)
+      - name: Set up JDK 21 (Temurin)
         uses: actions/setup-java@v3
         with:
-          java-version: '11'
+          java-version: '21'
           distribution: 'temurin'
 
       - name: Install Docker
@@ -36,8 +36,7 @@ jobs:
       - name: Build and run Docker containers
         run: |
           docker-compose up --build -d
-          sleep 30  # Warten bis die Container gestartet sind
+          sleep 30  # Wait for the containers to start
 
       - name: Run tests
-        run: |
-          docker-compose exec ResourceCalc java -jar /app/ResourCecalc.jar
+        run: docker-compose exec resourcecalc java -jar /app/app.jar
