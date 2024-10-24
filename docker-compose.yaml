@@ -8,9 +8,9 @@ services:
     networks:
       - myNetwork
 
-  resourcecalc:
+  java-app:
     build: .
-    container_name: resourcecalc
+    container_name: java-app
     depends_on:
       - assessment-service
     network_mode: service:assessment-service

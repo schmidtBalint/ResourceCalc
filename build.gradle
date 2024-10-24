@@ -37,6 +37,6 @@ tasks.withType(com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar) {
     archiveClassifier.set('')
     archiveVersion.set('1.0-SNAPSHOT')
     manifest {
-        attributes['Main-Class'] = 'com.example.Main'
+        attributes['Main-Class'] = 'Main'
     }
 }

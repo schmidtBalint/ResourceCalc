@@ -74,7 +74,7 @@ set CLASSPATH=%APP_HOME%\lib\ResourceCalc.jar;%APP_HOME%\lib\converter-gson-2.9.
 
 
 @rem Execute ResourceCalc
-"%JAVA_EXE%" %DEFAULT_JVM_OPTS% %JAVA_OPTS% %RESOURCE_CALC_OPTS%  -classpath "%CLASSPATH%"  %*
+"%JAVA_EXE%" %DEFAULT_JVM_OPTS% %JAVA_OPTS% %RESOURCE_CALC_OPTS%  -classpath "%CLASSPATH%" Main %*
 
 :end
 @rem End local scope for the variables with windows NT shell
