@@ -1,51 +1,63 @@
-name: CI
+name: build-push
 
 on:
   push:
     branches:
       - main
-
 jobs:
-  test:
+  run_service_and_test_app:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout the code
+      - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Set up JDK 21 (Temurin)
+      - name: Set up JDK 21
         uses: actions/setup-java@v3
         with:
-          java-version: '21'
           distribution: 'temurin'
+          java-version: '21'
 
-      - name: Install Docker
+      - name: Pull Assessment Docker Image
+        run: docker pull mrksdh/assessment
+
+      - name: Install cUrl
         run: |
-          sudo apt-get update
-          sudo apt-get install docker-ce docker-ce-cli containerd.io
+          sudo apt-get update && sudo apt-get install -y curl
 
-      - name: Install Docker Compose
+      - name: Create Docker Network
         run: |
-          sudo curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
-          sudo chmod +x /usr/local/bin/docker-compose
-          sudo ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose
+          docker network create my_network
 
-      - name: Build with Gradle
-        run: ./gradlew build
-
-      - name: Build and run Docker containers
+      - name: Start Assessment Docker Container
         run: |
-          docker-compose up --build -d
-          sleep 60  # Increase wait time to ensure containers are ready
+          docker run -d --name assessment --network my_network -p 8080:8080 mrksdh/assessment
+          sleep 15
 
-      - name: List running containers
-        run: docker ps
+      - name: Perform Health Check
+        run: |
+          curl -f http://localhost:8080/health || exit 1
 
-      - name: Fetch build logs
-        run: docker-compose logs --tail=100
+      - name: Grant Execute Permission for Gradle Wrapper
+        run: chmod +x ./gradlew
 
-      - name: Fetch application logs
-        run: docker-compose logs resourcecalc
+      - name: Build gradle with shadowJar
+        run: |
+          ./gradlew clean shadowJar
 
-      - name: Run tests
-        run: docker-compose exec resourcecalc java -jar /app/app.jar
+      - name: Run Java App
+        run: |
+          # Capture output from the Java app
+          output=$(java -jar build/libs/*.jar)
+          echo "$output"
+           # Extract the status code from the output
+          status_code=$(echo "$output" | grep -oP '"code":[0-9]*' | cut -d ":" -f 2)
+
+          # Output the status code to the environment
+          echo "status_code=$status_code" >> $GITHUB_ENV
+
+          # Check if the status code is 200
+          if [ "$status_code" != "200" ]; then
+            echo "Status code not found or is not 200, exiting with error."
+            exit 1
+          fi
