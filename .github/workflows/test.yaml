@@ -36,7 +36,10 @@ jobs:
       - name: Build and run Docker containers
         run: |
           docker-compose up --build -d
-          sleep 30  # Wait for the containers to start
+          sleep 60  # Increase wait time to ensure containers are ready
+
+      - name: List running containers
+        run: docker ps
 
       - name: Fetch application logs
         run: docker-compose logs resourcecalc
